@@ -1,0 +1,21 @@
+http:
+  services:
+    cluster1:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:8080"
+          - url: "http://localhost:8081"
+          - url: "http://localhost:8082"
+    cluster2:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:8080"
+          - url: "http://localhost:8081"
+          - url: "http://localhost:8082"
+
+  middlewares:
+    redbase:
+      plugin:
+        redbase:
+          redbaseurl: "redbase:9922"
+          defaulturl: "https://www.tacquet.be"

@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.11
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      - "443:443"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+
+    volumes:
+      - ${PWD}/config:/etc/traefik
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+      - ${PWD}/data:/data
+      - ${PWD}/log:/var/log
+      - ${PWD}/plugins:/plugins-local/src/github.com
+
+  redbase:
+    hostname: redbase
+    container_name: redbase
+    image: vtacquet/redbase:latest
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${PWD}/redbase/db:/db
+    ports:
+      - "8822:8822"
+      - "9922:9922"
+    environment:
+      - TZ=Europe/Brussels
+      - PHPLITEADMIN_PASSWORD=admin
+      - REDBASE_DB_PATH=/db
+      - REDBASE_URL=:9922
+    logging:
+      options:
+        max-size: 10m

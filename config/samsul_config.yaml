@@ -1,0 +1,7 @@
+http:
+  routers:
+    syamsul:
+      entryPoints:
+        - "web"
+      rule: "Host(`syamsul.mbiz.co.id`)"
+      service: cluster1

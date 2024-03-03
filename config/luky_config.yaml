@@ -1,0 +1,7 @@
+http:
+  routers:
+    luky:
+      entryPoints:
+        - "web"
+      rule: "Host(`luky.mbiz.co.id`)"
+      service: cluster2
